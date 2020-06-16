@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="author" content="www.yanshisan.cn" />
+    <meta name="robots" content="all" />
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/master.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/gloable.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/nprogress.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}" />
+</head>
+<body>
+    <div class="header">
+    </div>
+
+    {% include 'header.html' %}
+
+    <div class="doc-container" id="doc-container">
+        <div class="container-fixed">
+		    <div class="col-content">
+		        <div class="inner">
+		            <article class="article-list bloglist" id="LAY_bloglist" >
+                        {% for article in allarticle %}
+                            <section class="article-item zoomIn article">
+                                <div class="fc-flag">置顶</div>
+                                <h5 class="title">
+                                    <span class="fc-blue">【原创】</span>
+                                    <a href="{% url 'detail' %}{{ article.id }}">{{ article.title }}</a>
+                                </h5>
+                                <div class="time">
+                                    <span class="day">{{ article.created_time.day }}</span>
+                                    <span class="month fs-18">{{ article.created_time.month }}<span class="fs-14">月</span></span>
+                                    <span class="year fs-18 ml10">{{ article.created_time.year }}</span>
+                                </div>
+                                <div class="content">
+                                    <a href="{% url 'detail' %}{{ article.id }}" class="cover img-light">
+                                        <img src="{% url 'index' %}media/{{ article.img }}">
+                                    </a>
+                                    {{ article.excerpt }}
+                                </div>
+                                <div class="read-more">
+                                    <a href="{% url 'detail' %}{{ article.id }}" class="fc-black f-fwb">继续阅读</a>
+                                </div>
+                                <aside class="f-oh footer">
+                                    <div class="f-fl tags">
+                                        <span class="fa fa-tags fs-16"></span>
+                                        <a class="tag">{{ article.category }}</a>
+                                    </div>
+                                    <div class="f-fr">
+                                        <span class="read">
+                                            <i class="fa fa-eye fs-16"></i>
+                                            <i class="num">{{ article.views }}</i>
+                                        </span>
+                                        <span class="ml20">
+                                            <i class="fa fa-comments fs-16"></i>
+                                            <a href="javascript:void(0)" class="num fc-grey">1</a>
+                                        </span>
+                                    </div>
+                                </aside>
+                            </section>
+                        {% endfor %}
+		            </article>
+		        </div>
+		    </div>
+		    <div class="col-other">
+		        <div class="inner">
+					<div class="other-item" id="categoryandsearch">
+			    		<div class="search">
+					        <label class="search-wrap">
+					            <input type="text" id="searchtxt" placeholder="输入关键字搜索" />
+					            <span class="search-icon">
+					                <i class="fa fa-search"></i>
+					            </span>
+					        </label>
+			        		<ul class="search-result"></ul>
+			    		</div>
+			    		<ul class="category mt20" id="category">
+				        	<li data-index="0" class="slider"></li>
+				        	<li data-index="1"><a href="{% url 'article' %}">全部文章</a></li>
+                            {% for category in allcategory %}
+                                <li data-index="{{ category.index }}"><a href="{% url 'article' %}{{ category.id }}">{{ category.name }}</a></li>
+                            {% endfor %}
+			    		</ul>
+					</div>
+					<!--右边悬浮 平板或手机设备显示-->
+					<div class="category-toggle"><i class="layui-icon">&#xe603;</i></div>
+					<div class="article-category">
+					    <div class="article-category-title">分类导航</div>
+                            {% for category in allcategory %}
+                                <a href="{% url 'article' %}{{ category.id }}">{{ category.name }}</a>
+                            {% endfor %}
+					    <div class="f-cb"></div>
+					</div>
+					<!--遮罩-->
+					<div class="blog-mask animated layui-hide"></div>
+					<div class="other-item">
+					    <h5 class="other-item-title">热门文章</h5>
+					    <div class="inner">
+					        <ul class="hot-list-article">
+					                {% for hot in hotarticle %}
+                                        <li> <a href="{% url 'detail' %}{{ hot.id }}">{{ hot.title }}</a></li>
+					                {% endfor %}
+					        </ul>
+					    </div>
+					</div>
+					<div class="other-item">
+					    <h5 class="other-item-title">置顶推荐</h5>
+					    <div class="inner">
+					        <ul class="hot-list-article">
+					                {% for tui in tuiarticle %}
+					                    <li> <a href="{% url 'detail' %}{{ tui.id }}">{{ tui.title }}</a></li>
+					                {% endfor %}
+					        </ul>
+					    </div>
+					</div>
+		        </div>
+		    </div>
+		</div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'layui/layui.js' %}"></script>
+    <script src="{% static 'js/yss/gloable.js' %}"></script>
+    <script src="{% static 'js/plugins/nprogress.js' %}"></script>
+    <script>NProgress.start();</script>
+ 	<script src="{% static 'js/yss/article.js' %}"></script>
+    <script> 
+        window.onload = function () {
+            NProgress.done();
+        };
+    </script>
+</body>
+</html>
